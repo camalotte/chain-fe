@@ -1,23 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Hub from "./components/Hub";
 import AuthPage from "./components/AuthPage";
-
-const Landing = ({ loggedIn }) => {
-    return (
-        <div>
-            <h1>Welcome</h1>
-            <Link to="/login">
-                <button>Login</button>
-            </Link>
-            <Link to="/register">
-                <button>Register</button>
-            </Link>
-        </div>
-    );
-};
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -53,16 +39,16 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route exact path="/" render={() => <Landing loggedIn={loggedIn} />} />
                 <Route
                     exact
-                    path="/login"
-                    render={() => (loggedIn ? <Redirect to="/hub" /> : <Login onLogin={handleLogin} />)}
-                />
-                <Route
-                    exact
-                    path="/register"
-                    render={() => (loggedIn ? <Redirect to="/hub" /> : <Register />)}
+                    path="/"
+                    render={() =>
+                        loggedIn ? (
+                            <Redirect to="/hub" />
+                        ) : (
+                            <AuthPage onLogin={handleLogin} />
+                        )
+                    }
                 />
                 <Route
                     exact

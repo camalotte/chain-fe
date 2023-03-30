@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Register = () => {
+const Register = ({ showLogin, setShowLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -42,6 +42,9 @@ const Register = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                <button className="switch-button" onClick={() => setShowLogin(!showLogin)} type="button">
+                    Switch to Login
+                </button>
                 <button type="submit">Register</button>
             </form>
         </div>

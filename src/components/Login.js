@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, showLogin, setShowLogin }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -49,6 +48,9 @@ const Login = ({ onLogin }) => {
                     onChange={(event) => setPassword(event.target.value)}
                 />
             </label>
+            <button className="switch-button" onClick={() => setShowLogin(!showLogin)} type="button">
+                Switch to Register
+            </button>
             <button type="submit">Submit</button>
         </form>
     );

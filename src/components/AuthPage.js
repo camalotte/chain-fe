@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import Register from "./Register";
-import Hub from "./Hub";
 
 const AuthPage = ({ onLogin }) => {
+    const [showLogin, setShowLogin] = useState(true);
+
     return (
-        <div>
-            <Register />
-            <Login onLogin={onLogin} />
+        <div className="auth-container">
+            <div className="auth-form">
+                {showLogin ? (
+                    <Login onLogin={onLogin} showLogin={showLogin} setShowLogin={setShowLogin} />
+                ) : (
+                    <Register showLogin={showLogin} setShowLogin={setShowLogin} />
+                )}
+            </div>
         </div>
     );
 };
