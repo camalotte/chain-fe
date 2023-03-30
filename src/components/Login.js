@@ -1,56 +1,53 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5001/login", {
+            const response = await axios.post('http://localhost:5001/login', {
                 username,
                 password,
             });
-
-            if (response.status === 200) {
-                alert("Login successful");
-                onLogin(response.data.username)
-                setUsername("");
-                setPassword("");
-                // setLoggedIn(true);
-            }
+            onLogin(response.data.user);
+            navigate('/hub'); // Redirect to the hub page on successful login
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                alert("Invalid credentials");
-            } else {
-                console.error("Error logging in:", error);
-                alert("Error logging in");
-            }
+            setError('Invalid username or password');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <h2>Login</h2>
-            <label>
-                Username:
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                />
-            </label>
-            <label>
-                Password:
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                />
-            </label>
-            <button type="submit">Submit</button>
-        </form>
+            <form onSubmit={handleLogin}>
+                <div>
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit">Login</button>
+            </form>
+        </div>
     );
 };
 

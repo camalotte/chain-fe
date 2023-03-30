@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
+import Home from './components/Home';
+import Hub from './components/Hub';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -11,41 +15,31 @@ const App = () => {
   };
 
   return (
-      <div>
-        {loggedIn ? (
-            <div>
-              <nav>
-                <span>Welcome, {username}!</span>
-              </nav>
-              <h1>Home Page</h1>
-            </div>
-        ) : (
-            <div>
-              <Register />
-              <Login onLogin={handleLogin} />
-            </div>
-        )}
-      </div>
+      <BrowserRouter>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/hub">Hub</Link>
+              </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/hub" element={<Hub />} />
+            {!loggedIn && (
+                <>
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                </>
+            )}
+          </Routes>
+        </div>
+      </BrowserRouter>
   );
 };
-export default App;
 
-// import React from 'react';
-// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import Login from './components/Login';
-// import Register from './components/Register';
-// import User from './components/User';
-//
-// const App = () => {
-//   return (
-//       <Router>
-//         <Switch>
-//           <Route exact path="/" component={Login} />
-//           <Route path="/register" component={Register} />
-//           <Route path="/user/:username" component={User} />
-//         </Switch>
-//       </Router>
-//   );
-// }
-//
-// export default App;
+export default App;
