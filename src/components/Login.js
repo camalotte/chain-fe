@@ -15,9 +15,10 @@ const Login = ({ onLogin }) => {
 
             if (response.status === 200) {
                 alert("Login successful");
+                onLogin(response.data.username)
                 setUsername("");
                 setPassword("");
-                setLoggedIn(true);
+                // setLoggedIn(true);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
