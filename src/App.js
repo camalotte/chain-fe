@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
-import Home from './components/Home';
 import Hub from './components/Hub';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const handleLogin = (username) => {
+  const [token, setToken] = useState('');
+
+  const handleLogin = (username, token) => {
     setUsername(username);
+    setToken(token);
     setLoggedIn(true);
   };
 
   return (
-      <BrowserRouter>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/hub">Hub</Link>
-              </li>
-            </ul>
-          </nav>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/hub" element={<Hub />} />
-            {!loggedIn && (
-                <>
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/login" element={<Login onLogin={handleLogin} />} />
-                </>
-            )}
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <Router>
+        <Routes>
+          <Route
+              path="/"
+              element={
+                loggedIn ? (
+                    <Navigate to="/hub" />
+                ) : (
+                    <div>
+                      <Register />
+                      <Login onLogin={handleLogin} />
+                    </div>
+                )
+              }
+          />
+          <Route
+              path="/hub"
+              element={
+                loggedIn ? (
+                    <Hub username={username} token={token} />
+                ) : (
+                    <Navigate to="/" />
+                )
+              }
+          />
+        </Routes>
+      </Router>
   );
 };
 
