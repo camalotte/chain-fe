@@ -4,6 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Hub from "./components/Hub";
 import AuthPage from "./components/AuthPage";
+import MainLayout from "./components/MainLayout";
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -55,7 +56,9 @@ const App = () => {
                     path="/hub"
                     render={() =>
                         loggedIn ? (
-                            <Hub username={username} token={token} onLogout={handleLogout} />
+                            <MainLayout onLogout={handleLogout}>
+                                <Hub username={username} token={token} />
+                            </MainLayout>
                         ) : (
                             <Redirect to="/" />
                         )
@@ -65,5 +68,4 @@ const App = () => {
         </Router>
     );
 };
-
 export default App;

@@ -2,27 +2,33 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 const Hub = ({ username, token, onLogout }) => {
     const [hubData, setHubData] = useState(null);
+    // console.log("Hub component, username:", username);
+    // console.log(`Hub component, username: ${username}`);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
+        const fetchData = () => {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
 
-                // Fetch data from the /hub route
-                const response = await axios.get("http://localhost:5001/hub", { headers });
-
-                // Process the response data here
-                console.log(response.data);
-                setHubData(response.data);
-            } catch (error) {
-                console.error("Error fetching data from protected route:", error);
-            }
+            // Fetch data from the /hub route
+            axios
+                .get("http://localhost:5001/hub", { headers })
+                .then((response) => {
+                    // Process the response data here
+                    console.log(response.data);
+                    setHubData(response.data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data from protected route:", error);
+                });
         };
 
         fetchData();
     }, [token]);
+
+    // console.log("Rendering Hub component, username:", username); // Added this line
+    // console.log("Username prop type:", typeof username);
 
     return (
         <div>
@@ -31,7 +37,6 @@ const Hub = ({ username, token, onLogout }) => {
                 <div>
                     {/* Display the hub data */}
                     <p>{hubData.message}</p>
-                    <button onClick={onLogout}>Logout</button>
                 </div>
             ) : (
                 <p>Loading...</p>
@@ -39,5 +44,4 @@ const Hub = ({ username, token, onLogout }) => {
         </div>
     );
 };
-
 export default Hub;
