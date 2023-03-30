@@ -9,10 +9,9 @@ const Login = ({ onLogin }) => {
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('/login', {
+        const response = await axios.post('http://localhost:5000/login', {
             username, password,
         });
-
         if (response.status === 200) {
             alert('Login successful');
             onLogin(response.data.username);
