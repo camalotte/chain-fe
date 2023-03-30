@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const Hub = ({ username, token }) => {
+const Hub = ({ username, token, onLogout }) => {
     const [hubData, setHubData] = useState(null);
 
     useEffect(() => {
@@ -32,6 +31,7 @@ const Hub = ({ username, token }) => {
                 <div>
                     {/* Display the hub data */}
                     <p>{hubData.message}</p>
+                    <button onClick={onLogout}>Logout</button>
                 </div>
             ) : (
                 <p>Loading...</p>

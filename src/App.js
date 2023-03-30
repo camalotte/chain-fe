@@ -1,49 +1,91 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
-import Hub from './components/Hub';
-
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import Register from "./components/Register";
+import Login from "./components/Login";
+import Hub from "./components/Hub";
+import AuthPage from "./components/AuthPage";
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [token, setToken] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [username, setUsername] = useState("");
+    const [token, setToken] = useState("");
 
-  const handleLogin = (username, token) => {
-    setUsername(username);
-    setToken(token);
-    setLoggedIn(true);
-  };
+    const handleLogin = (username, token) => {
+        setUsername(username);
+        setToken(token);
+        setLoggedIn(true);
+        localStorage.setItem("username", username);
+        localStorage.setItem("token", token);
+    };
 
-  return (
-      <Router>
-        <Routes>
-          <Route
-              path="/"
-              element={
-                loggedIn ? (
-                    <Navigate to="/hub" />
-                ) : (
-                    <div>
-                      <Register />
-                      <Login onLogin={handleLogin} />
-                    </div>
-                )
-              }
-          />
-          <Route
-              path="/hub"
-              element={
-                loggedIn ? (
-                    <Hub username={username} token={token} />
-                ) : (
-                    <Navigate to="/" />
-                )
-              }
-          />
-        </Routes>
-      </Router>
-  );
+    const handleLogout = () => {
+        setUsername("");
+        setToken("");
+        setLoggedIn(false);
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+    };
+
+    useEffect(() => {
+        const savedUsername = localStorage.getItem("username");
+        const savedToken = localStorage.getItem("token");
+        if (savedUsername && savedToken) {
+            setUsername(savedUsername);
+            setToken(savedToken);
+            setLoggedIn(true);
+        }
+    }, []);
+
+    return (
+        <Router>
+            <Switch>
+                <Route
+                    exact
+                    path="/login"
+                    render={() =>
+                        loggedIn ? (
+                            <Redirect to="/hub" />
+                        ) : (
+                            <Login onLogin={handleLogin} />
+                        )
+                    }
+                />
+                <Route
+                    exact
+                    path="/register"
+                    render={() =>
+                        loggedIn ? (
+                            <Redirect to="/hub" />
+                        ) : (
+                            <Register />
+                        )
+                    }
+                />
+                <Route
+                    exact
+                    path="/hub"
+                    render={() =>
+                        loggedIn ? (
+                            <Hub username={username} token={token} onLogout={handleLogout} />
+                        ) : (
+                            <Redirect to="/login" />
+                        )
+                    }
+                />
+                <Route
+                    exact
+                    path="/"
+                    render={() =>
+                        loggedIn ? (
+                            <Redirect to="/hub" />
+                        ) : (
+                            <AuthPage onLogin={handleLogin} />
+                        )
+                    }
+                />
+                <Redirect from="/" to="/login" />
+            </Switch>
+        </Router>
+    );
 };
 
 export default App;
