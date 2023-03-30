@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import async from "async";
 
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const response = await axios.post("http://localhost:5001/login", {
-            username,
-            password,
-        });
-        if (response.status === 200) {
-            const user = response.data.user;
-            onLogin(user);
-        } else {
-            alert("Invalid credentials");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:5001/login", {
+                username,
+                password,
+            });
+
+            if (response.status === 200) {
+                alert("Login successful");
+                setUsername("");
+                setPassword("");
+                setLoggedIn(true);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert("Invalid credentials");
+            } else {
+                console.error("Error logging in:", error);
+                alert("Error logging in");
+            }
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit}>
