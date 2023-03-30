@@ -9,7 +9,7 @@ const Login = ({ onLogin }) => {
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('https://localhost:5001/login', {
+        const response = await axios.post('http://localhost:5001/login', {
             username, password,
         });
         if (response.status === 200) {
@@ -17,7 +17,7 @@ const Login = ({ onLogin }) => {
             onLogin(response.data.username);
         }
     } catch (error) {
-        console.error( 'Error logging in:', error);
+        // console.error( 'Error logging in:', error);
         alert('Invalid credentials');
     }
 };
