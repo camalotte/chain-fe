@@ -18,7 +18,6 @@ const App = () => {
         localStorage.setItem("username", username);
         localStorage.setItem("token", token);
     };
-
     const handleLogout = () => {
         setUsername("");
         setToken("");
@@ -69,3 +68,35 @@ const App = () => {
     );
 };
 export default App;
+
+// return (
+//     <Router>
+//         <Switch>
+//             <Route exact path="/" render={() => <Landing loggedIn={loggedIn} />} />
+//             <Route
+//                 exact
+//                 path="/login"
+//                 render={() => (loggedIn ? <Redirect to="/hub" /> : <Login onLogin={handleLogin} />)}
+//             />
+//             <Route
+//                 exact
+//                 path="/register"
+//                 render={() => (loggedIn ? <Redirect to="/hub" /> : <Register />)}
+//             />
+//             <Route
+//                 exact
+//                 path="/hub"
+//                 render={() =>
+//                     loggedIn ? (
+//                         <Hub username={username} token={token} onLogout={handleLogout} />
+//                     ) : (
+//                         <Redirect to="/" />
+//                     )
+//                 }
+//             />
+//         </Switch>
+//     </Router>
+// );
+// };
+//
+// export default App;
