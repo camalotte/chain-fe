@@ -1,73 +1,44 @@
+import { connectSocket, disconnectSocket } from "../Socket";
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import './hub.css';
-import './search.css'
+import '../styles/hub.css';
 import ChatList from './ChatList';
+import ChatWindow from "./ChatWindow";
+import SearchInput from "./SearchInput";
 
-const SearchInput = ({ searchInput, handleSearchChange, searchResults, handleSelectUser, setSearchResults }) => {
-    const searchRef = useRef(null);
-
-    const handleClick = (event) => {
-        if (searchRef.current && !searchRef.current.contains(event.target)) {
-            setSearchResults([]);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('click', handleClick, true);
-        return () => {
-            document.removeEventListener('click', handleClick, true);
-        };
-    });
-
-    return (
-        <div className="search-container" ref={searchRef}>
-            <input
-                type="text"
-                className="search-input"
-                placeholder="Search users..."
-                value={searchInput} // Use value instead of defaultValue
-                onChange={handleSearchChange}
-            />
-            {searchResults.length > 0 && (
-                <div className="search-results">
-                    {searchResults.map((user) => (
-                        <div
-                            key={user.username}
-                            className="search-result"
-                            onClick={() => handleSelectUser(user)}
-                        >
-                            <div className="search-result-thumbnail"></div>
-                            <span>{user.username}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
+const generateRoomId = (user1, user2) => {
+    return [user1, user2].sort().join('_');
 };
+
 const Hub = ({ username, token, onLogout }) => {
     const [hubData, setHubData] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [chats, setChats] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
-        const fetchData = () => {
+        const fetchData = async () => {
             const headers = {
                 Authorization: `Bearer ${token}`,
             };
 
-            axios
-                .get('http://localhost:5001/hub', { headers })
-                .then((response) => {
-                    setHubData(response.data);
-                })
-                .catch((error) => {
-                    console.error('Error fetching data from protected route:', error);
-                });
+            try {
+                const response = await axios.get('http://localhost:5001/hub', { headers });
+                setHubData(response.data);
+
+                // Connect the socket after fetching data
+                connectSocket(token);
+            } catch (error) {
+                console.error('Error fetching data from protected route:', error);
+            }
         };
         fetchData();
+
+        return () => {
+            // Disconnect the socket when the component unmounts
+            disconnectSocket();
+        };
     }, [token]);
 
     const handleSearchChange = async (event) => {
@@ -93,6 +64,7 @@ const Hub = ({ username, token, onLogout }) => {
         }
     };
     const handleSelectUser = (user) => {
+        setSelectedUser(user);
         // Check if the chat with the selected user already exists
         const existingChat = chats.find((chat) => chat.username === user.username);
 
@@ -104,6 +76,9 @@ const Hub = ({ username, token, onLogout }) => {
         // Clear search results and input
         setSearchResults([]);
         setSearchInput('');
+    };
+    const handleChatSelect = (chat) => {
+        setSelectedUser({ username: chat.username });
     };
 
 
@@ -119,9 +94,12 @@ const Hub = ({ username, token, onLogout }) => {
                 handleSelectUser={handleSelectUser}
                 setSearchResults={setSearchResults}
             />
+            {selectedUser && (
+                <ChatWindow roomId={generateRoomId(username, selectedUser.username)} />
+            )}
             <div className="main-content">
                 <div className="chat-list-container">
-                    <ChatList chats={chats} />
+                    <ChatList chats={chats} onChatSelect={handleChatSelect} />
                 </div>
                 <div className="central-area">
                     {/* Reserve this area for future content */}

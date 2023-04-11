@@ -1,25 +1,36 @@
 import React from 'react';
-import './chatList.css';
+import '../styles/chatList.css';
 
-const ChatCell = ({ username }) => {
+const ChatCell = ({ chat, onClick }) => {
     return (
-        <div className="chat-cell">
+        <div className="chat-cell" onClick={onClick}>
             <div className="chat-cell-thumbnail"></div>
             <div className="chat-cell-content">
-                <div className="chat-cell-username">{username}</div>
-                <div className="chat-cell-last-message">Last message goes here</div>
+                <span className="chat-cell-username">{chat.username}</span>
+                <span className="chat-cell-last-message">{chat.lastMessage}</span>
             </div>
         </div>
     );
 };
 
-const ChatList = ({ chats }) => {
+const ChatList = ({ chats, onChatSelect }) => {
     return (
         <div className="chat-list">
             {chats.map((chat) => (
-                <ChatCell key={chat.username} username={chat.username} />
+                <div
+                    key={chat.username}
+                    className="chat-cell"
+                    onClick={() => onChatSelect(chat.username)} // Call the onChatSelect function when a chat cell is clicked
+                >
+                    <div className="chat-cell-thumbnail"></div>
+                    <div className="chat-cell-content">
+                        <span className="chat-cell-username">{chat.username}</span>
+                        <span className="chat-cell-last-message">{chat.lastMessage}</span>
+                    </div>
+                </div>
             ))}
         </div>
     );
 };
+
 export default ChatList;
