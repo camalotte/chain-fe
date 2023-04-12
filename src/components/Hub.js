@@ -1,10 +1,10 @@
-import { connectSocket, disconnectSocket } from "../Socket";
+import socket, { connectSocket, disconnectSocket } from "../Socket";
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 import ChatList from "./ChatList";
-import ChatWindow from "./ChatWindow";
 import SearchInput from "./SearchInput";
+import ChatScreen from "./ChatScreen";
 import '../styles/hub.css';
 
 const generateRoomId = (user1, user2) => {
@@ -17,6 +17,21 @@ const Hub = ({ username, token, onLogout }) => {
     const [searchInput, setSearchInput] = useState('');
     const [chats, setChats] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [messages, setMessages] = useState([]);
+
+    const handleSendMessage = (content) => {
+        // Here, you'll need to implement the functionality to save the message to the database.
+        // Once the message is saved, you can add it to the messages state.
+        const newMessage = {
+            sender: username,
+            content: content,
+            timestamp: new Date(),
+        };
+        // Emit an event to the server with the new message
+        socket.emit('send_message', newMessage);
+    };
+    // Pass the messages state and the handleSendMessage function to the ChatScreen component
+    <ChatScreen messages={messages} currentUser={username} onSendMessage={handleSendMessage} />
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,27 +98,27 @@ const Hub = ({ username, token, onLogout }) => {
     };
 
 
+
+
     return (
-        <div className="hub-container">
-            <div className="header">
-                <h1>Welcome to your Hub, {username}!</h1>
-            </div>
-            <SearchInput
-                searchInput={searchInput}
-                handleSearchChange={handleSearchChange}
-                searchResults={searchResults}
-                handleSelectUser={handleSelectUser}
-                setSearchResults={setSearchResults}
-            />
-            {selectedUser && (
-                <ChatWindow roomId={generateRoomId(username, selectedUser.username)} />
-            )}
-            <div className="main-content">
-                <div className="chat-list-container">
-                    <ChatList chats={chats} onChatSelect={handleChatSelect} />
+        <div className="hub-page">
+            <div className="hub-container">
+                <div className="search-row">
+                    <SearchInput
+                        searchInput={searchInput}
+                        handleSearchChange={handleSearchChange}
+                        searchResults={searchResults}
+                        handleSelectUser={handleSelectUser}
+                        setSearchResults={setSearchResults}
+                    />
                 </div>
-                <div className="central-area">
-                    {/* Reserve this area for future content */}
+                <div className="chat-row">
+                    <div className="chat-list-container">
+                        <ChatList chats={chats} onChatSelect={handleChatSelect} />
+                    </div>
+                    <div className="chat-screen-container">
+                        {/* Reserve this area for future content */}
+                    </div>
                 </div>
             </div>
         </div>
