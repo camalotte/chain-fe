@@ -1,14 +1,14 @@
-.search-container {
-    position: relative;
-    margin-bottom: 2rem;
-    width: 300px;
-    /*border-radius: 20%;*/
-}
+/*.search-container {*/
+/*    position: relative;*/
+/*    margin-bottom: 2rem;*/
+/*    width: 100%;*/
+/*}*/
 
 .search-input {
     padding: 0.5rem;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 20px;
 }
 
 .search-results {

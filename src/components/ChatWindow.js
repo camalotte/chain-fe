@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import socket from "../Socket";
-
 const ChatWindow = ({ roomId }) => {
     const [inputMessage, setInputMessage] = useState("");
     const [messages, setMessages] = useState([]);

@@ -1,10 +1,11 @@
 import { connectSocket, disconnectSocket } from "../Socket";
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import '../styles/hub.css';
-import ChatList from './ChatList';
+
+import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
 import SearchInput from "./SearchInput";
+import '../styles/hub.css';
 
 const generateRoomId = (user1, user2) => {
     return [user1, user2].sort().join('_');

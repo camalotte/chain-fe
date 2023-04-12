@@ -1,18 +1,5 @@
 import React from 'react';
 import '../styles/chatList.css';
-
-const ChatCell = ({ chat, onClick }) => {
-    return (
-        <div className="chat-cell" onClick={onClick}>
-            <div className="chat-cell-thumbnail"></div>
-            <div className="chat-cell-content">
-                <span className="chat-cell-username">{chat.username}</span>
-                <span className="chat-cell-last-message">{chat.lastMessage}</span>
-            </div>
-        </div>
-    );
-};
-
 const ChatList = ({ chats, onChatSelect }) => {
     return (
         <div className="chat-list">
@@ -32,5 +19,4 @@ const ChatList = ({ chats, onChatSelect }) => {
         </div>
     );
 };
-
 export default ChatList;
