@@ -1,13 +1,19 @@
 import React from 'react';
 import '../styles/chatList.css';
+
 const ChatList = ({ chats, onChatSelect }) => {
+    const handleChatSelect = (username) => {
+        console.log(`Selected chat with user ${username}`);
+        onChatSelect(username);
+    };
+
     return (
         <div className="chat-list">
             {chats.map((chat) => (
                 <div
                     key={chat.username}
                     className="chat-cell"
-                    onClick={() => onChatSelect(chat.username)} // Call the onChatSelect function when a chat cell is clicked
+                    onClick={() => handleChatSelect(chat.username)}
                 >
                     <div className="chat-cell-thumbnail"></div>
                     <div className="chat-cell-content">
@@ -19,4 +25,5 @@ const ChatList = ({ chats, onChatSelect }) => {
         </div>
     );
 };
+
 export default ChatList;
