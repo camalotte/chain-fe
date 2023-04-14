@@ -116,7 +116,7 @@ const Hub = ({ username, token, onLogout }) => {
                     />
                 </div>
                 <div className="chat-row">
-                    <div className="chat-list-container">
+                    <div className="contact-list-container">
                         <ChatList chats={chats} />
                     </div>
                     <div className="chat-screen-container">

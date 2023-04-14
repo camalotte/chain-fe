@@ -61,62 +61,84 @@
     margin-right: 1rem;
 }
 
-/*!*ROW TWO */
+/*ROW TWO */
 .chat-row {
     display: flex;
     flex-grow: 1;
-    background-color: #f0f0f0;
+    width: 100vw;
+    background-color: lavender;
 }
 
-/*LEFT: CHATLIST*/
-.chat-list-container {
-    width: 25%;
+/*LEFT: CONTACT LIST */
+.contact-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+    min-width: 25%;
     height: 100%;
     overflow-y: auto;
-    background-color: #61dafb;
+    /*background-color: #61dafb;*/
+    padding: 5px;
 }
 
-.chat-cell {
+.contact-cell {
     display: flex;
     align-items: center;
-    background-color: darkgray;
+    background-color: white;
     padding: 10px;
     cursor: pointer;
-    border-radius: 10px;
-    margin: 5px;
+    border-radius: 50px;
+    margin: 4px 1px;
+    width: auto;
 }
 
-.chat-cell:hover {
-    background-color: rosybrown;
+.contact-cell:hover {
+    box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.5);
 }
 
-.chat-cell-thumbnail {
+.contact-cell-thumbnail {
     background-color: gray;
     border-radius: 50%;
     height: 50px;
     width: 50px;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
-.chat-cell-content {
+.contact-cell-content {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.chat-cell-username {
+.contact-cell-username {
     font-weight: bold;
     font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.chat-cell-last-message {
+.contact-cell-last-message {
     font-size: 0.9rem;
     color: gray;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*RIGHT: CHATSCREEN*/
 .chat-screen-container {
-    width: 80%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex-grow: 1; /* added this line to make it grow to fill the remaining space */
+    background-color: white; /* added this line for better visibility */
+}
+
+.chat-screen-content {
+    flex-grow: 1; /* added this line to make it grow to fill the remaining space */
+    overflow-y: auto; /* added this line to add scroll when content exceeds the container height */
 }
