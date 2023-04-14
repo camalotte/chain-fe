@@ -10,6 +10,7 @@ const Hub = ({ username, token, onLogout }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
+    const [chats, setChats] = useState([]);
 
     useEffect(() => {
         if (username && token) {
@@ -49,6 +50,58 @@ const Hub = ({ username, token, onLogout }) => {
         setSearchInput("");
     };
 
+    const handleAddContact = async (contactUsername) => {
+        try {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            const response = await axios.post(
+                "http://localhost:5001/add-contact",
+                { contactUsername },
+                { headers }
+            );
+
+            if (response.status === 201) {
+                // If the contact is added successfully, update the chats state
+                setChats((prevChats) => [
+                    ...prevChats,
+                    { contact_username: contactUsername },
+                ]);
+            } else {
+                console.error("Error adding contact:", response.data.message);
+            }
+        } catch (error) {
+            console.error("Error adding contact:", error);
+        }
+    };
+
+    const fetchContacts = async () => {
+        try {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            const response = await axios.get("http://localhost:5001/contacts", { headers });
+
+            if (response.status === 200) {
+                setChats(response.data);
+            } else {
+                console.error("Error fetching contacts:", response.data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching contacts:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (token) {
+            fetchContacts();
+        }
+    }, [token]);
+
+
+
     return (
         <div className="hub-page">
             <div className="hub-container">
@@ -58,12 +111,13 @@ const Hub = ({ username, token, onLogout }) => {
                         handleSearchChange={handleSearchChange}
                         searchResults={searchResults}
                         handleSelectUser={handleSelectUser}
+                        handleAddContact={handleAddContact}
                         setSearchResults={setSearchResults}
                     />
                 </div>
                 <div className="chat-row">
                     <div className="chat-list-container">
-                        <ChatList />
+                        <ChatList chats={chats} />
                     </div>
                     <div className="chat-screen-container">
                         {selectedUser && <ChatScreen />}
