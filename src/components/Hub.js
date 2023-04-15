@@ -10,7 +10,9 @@ const Hub = ({ username, token, onLogout }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
-    const [chats, setChats] = useState([]);
+    const [contacts, setContacts] = useState([]);
+    const [chatHistory, setChatHistory] = useState([]);
+
 
     useEffect(() => {
         if (username && token) {
@@ -63,8 +65,8 @@ const Hub = ({ username, token, onLogout }) => {
             );
 
             if (response.status === 201) {
-                // If the contact is added successfully, update the chats state
-                setChats((prevChats) => [
+                // If the contact is added successfully, update the contacts state
+                setContacts((prevChats) => [
                     ...prevChats,
                     { contact_username: contactUsername },
                 ]);
@@ -85,7 +87,7 @@ const Hub = ({ username, token, onLogout }) => {
             const response = await axios.get("http://localhost:5001/contacts", { headers });
 
             if (response.status === 200) {
-                setChats(response.data);
+                setContacts(response.data);
             } else {
                 console.error("Error fetching contacts:", response.data.message);
             }
@@ -100,7 +102,26 @@ const Hub = ({ username, token, onLogout }) => {
         }
     }, [token]);
 
-
+    const fetchChatHistory = async (contactUsername) => {
+        try {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+            const response = await axios.get(
+                `http://localhost:5001/chat-history/${contactUsername}`,
+                { headers }
+            );
+            if (response.status === 200) {
+                setChatHistory(response.data);
+                // Log the fetched chat history
+                console.log("Fetched chat history:", response.data);
+            } else {
+                console.error("Error fetching chat history:", response.data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching chat history:", error);
+        }
+    };
 
     return (
         <div className="hub-page">
@@ -117,10 +138,10 @@ const Hub = ({ username, token, onLogout }) => {
                 </div>
                 <div className="chat-row">
                     <div className="contact-list-container">
-                        <ChatList chats={chats} />
+                        <ChatList chats={contacts} onSelectContact={fetchChatHistory} />
                     </div>
                     <div className="chat-screen-container">
-                        {selectedUser && <ChatScreen />}
+                        {selectedUser && <ChatScreen chatHistory={chatHistory} />}
                     </div>
                 </div>
             </div>

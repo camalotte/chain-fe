@@ -1,6 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import '../styles/searchInput.css';
-
 const SearchInput = ({ searchInput, handleSearchChange, searchResults, handleSelectUser, handleAddContact, setSearchResults }) => {
     const searchRef = useRef(null);
 
