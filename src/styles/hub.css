@@ -1,8 +1,36 @@
+body {
+}
+
+.navbar {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    background-color: black;
+    color: white;
+    height: 60px;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.navbar button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+
 .hub-page {
     display: flex;
     flex-direction: column;
     padding-top: 60px;
-    height: calc(100vh - 60px);
+    height: auto;
 }
 
 .hub-container {
@@ -13,6 +41,7 @@
 
 /*FIRST ROW: SEARCHBAR */
 .search-row {
+    position: sticky;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,6 +96,7 @@
     flex-grow: 1;
     width: 100vw;
     background-color: lavender;
+    height: 100%;
 }
 
 /*LEFT: CONTACT LIST */
@@ -75,10 +105,12 @@
     flex-direction: column;
     width: 15%;
     min-width: 25%;
-    height: 100%;
-    overflow-y: auto;
-    /*background-color: #61dafb;*/
     padding: 5px;
+
+    /*position: static;*/
+    height: 100%;
+    overflow-y: scroll;
+
 }
 
 .contact-cell {
@@ -134,14 +166,18 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
     width: 100%;
     background-color: #f2f2f2;
     padding: 10px;
     box-sizing: border-box;
+    /*position: fixed;*/
+    height: 100%;
+    /*overflow-y: scroll;*/
 }
 
 .chat-history {
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     flex-grow: 1;
     margin-bottom: 10px;

@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import socket from "../Socket";
 import axios from 'axios';
-const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername}) => {
+const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleNewMessage }) => {
     const [messageContent, setMessageContent] = useState("");
 
     const handleSendMessage = async (e) => {
@@ -18,8 +18,16 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername}) => {
             );
 
             if (response.status === 201) {
+
+                // Add the sent message to the chatHistory state
+                handleNewMessage({
+                    messageId: response.data.messageId,
+                    sender: currentUsername,
+                    content: messageContent,
+                    timestamp: new Date().toISOString(),
+                });
+
                 setMessageContent("");
-                // Update chatHistory state with the new message
             } else {
                 console.error("Error sending message:", response.data.message);
             }
@@ -28,8 +36,18 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername}) => {
         }
     };
 
+
+    useEffect(() => {
+        socket.on("message", handleNewMessage);
+
+        return () => {
+            socket.off("message", handleNewMessage);
+        };
+    }, []);
+
+
     return (
-        <div className="chat-screen-container">
+        <div>
             <div className="chat-history">
                 {chatHistory.map((message, index) => (
                     <div

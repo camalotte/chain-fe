@@ -124,18 +124,15 @@ const Hub = ({ username, token, onLogout }) => {
         }
     };
 
+
     const handleNewMessage = (message) => {
         setChatHistory((prevChatHistory) => [...prevChatHistory, message]);
     };
 
-    useEffect(() => {
-        socket.on("message", handleNewMessage);
 
-        return () => {
-            socket.off("message", handleNewMessage);
-        };
-    }, []);
     console.log('Selected user:', selectedUser);
+
+
     return (
         <div className="hub-page">
             <div className="hub-container">
@@ -160,6 +157,7 @@ const Hub = ({ username, token, onLogout }) => {
                                 currentUsername={username}
                                 chatHistory={chatHistory}
                                 token={token}
+                                handleNewMessage={handleNewMessage}
                             />
                         )}
                     </div>

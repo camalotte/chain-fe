@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import Register from "./Register";
+import "../styles/hub.css";
 
 const AuthPage = ({ onLogin }) => {
     const [showLogin, setShowLogin] = useState(true);
@@ -17,5 +18,4 @@ const AuthPage = ({ onLogin }) => {
         </div>
     );
 };
-
 export default AuthPage;
