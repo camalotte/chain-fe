@@ -16,6 +16,10 @@ body {
     z-index: 1;
 }
 
+.navbar-user {
+    color: white;
+}
+
 .navbar button {
     background-color: transparent;
     border: 1px solid white;
@@ -41,7 +45,7 @@ body {
 
 /*FIRST ROW: SEARCHBAR */
 .search-row {
-    position: sticky;
+    /*position: fixed;*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,7 +97,8 @@ body {
 /*ROW TWO */
 .chat-row {
     display: flex;
-    flex-grow: 1;
+    /*position: fixed;*/
+    /*flex-grow: 1;*/
     width: 100vw;
     background-color: lavender;
     height: 100%;
@@ -106,11 +111,10 @@ body {
     width: 15%;
     min-width: 25%;
     padding: 5px;
-
     /*position: static;*/
     height: 100%;
     overflow-y: scroll;
-
+    background-color: #005fa3;
 }
 
 .contact-cell {
@@ -162,24 +166,31 @@ body {
 }
 
 /*RIGHT: CHATSCREEN*/
+/*.chat-screen-container {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: space-between;*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+
+/*    background-color: #f2f2f2;*/
+/*    padding: 10px;*/
+/*    box-sizing: border-box;*/
+/*    overflow-y: scroll;*/
+/*}*/
+
 .chat-screen-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px;
     width: 100%;
-    background-color: #f2f2f2;
-    padding: 10px;
-    box-sizing: border-box;
-    /*position: fixed;*/
-    height: 100%;
-    /*overflow-y: scroll;*/
 }
 
 .chat-history {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    flex-grow: 1;
+    /*flex-grow: 1;*/
     margin-bottom: 10px;
 }
 
@@ -221,8 +232,13 @@ body {
 
 form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
+    justify-content: right;
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    /*right: 0;*/
+    /*margin-bottom: 10px;*/
+    /*margin-right: 10px;*/
 }
 
 input {
@@ -233,7 +249,7 @@ input {
 }
 
 button {
-    background-color: #4caf50;
+    background-color: darkblue;
     color: white;
     font-size: 16px;
     padding: 10px 20px;
