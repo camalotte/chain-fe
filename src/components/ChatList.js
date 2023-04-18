@@ -1,8 +1,5 @@
 import React from 'react';
 const ChatList = ({ chats, onSelectContact }) => {
-    const handleSelectContact = (contactUsername) => {
-        onSelectContact(contactUsername);
-    };
 
     return (
         <>
@@ -10,7 +7,7 @@ const ChatList = ({ chats, onSelectContact }) => {
                 <div
                     key={chat.contact_username}
                     className="contact-cell"
-                    onClick={() => handleSelectContact(chat.contact_username)}
+                    onClick={() => onSelectContact(chat.contact_username)}
                 >
                     <div className="contact-cell-thumbnail"></div>
                     <span>{chat.contact_username}</span>
@@ -18,6 +15,5 @@ const ChatList = ({ chats, onSelectContact }) => {
             ))}
         </>
     );
-
 };
 export default ChatList;

@@ -1,4 +1,4 @@
-import { connectSocket, disconnectSocket } from "../Socket";
+import socket, { connectSocket, disconnectSocket } from "../Socket";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import ChatList from "./ChatList";
@@ -113,8 +113,9 @@ const Hub = ({ username, token, onLogout }) => {
             );
             if (response.status === 200) {
                 setChatHistory(response.data);
+                setSelectedUser({ username: contactUsername });
                 // Log the fetched chat history
-                console.log("Fetched chat history:", response.data);
+                console.log(`fetched msg history with: ${contactUsername}`, response.data);
             } else {
                 console.error("Error fetching chat history:", response.data.message);
             }
@@ -123,6 +124,18 @@ const Hub = ({ username, token, onLogout }) => {
         }
     };
 
+    const handleNewMessage = (message) => {
+        setChatHistory((prevChatHistory) => [...prevChatHistory, message]);
+    };
+
+    useEffect(() => {
+        socket.on("message", handleNewMessage);
+
+        return () => {
+            socket.off("message", handleNewMessage);
+        };
+    }, []);
+    console.log('Selected user:', selectedUser);
     return (
         <div className="hub-page">
             <div className="hub-container">
@@ -141,11 +154,19 @@ const Hub = ({ username, token, onLogout }) => {
                         <ChatList chats={contacts} onSelectContact={fetchChatHistory} />
                     </div>
                     <div className="chat-screen-container">
-                        {selectedUser && <ChatScreen chatHistory={chatHistory} />}
+                        {selectedUser && (
+                            <ChatScreen
+                                selectedUser={selectedUser}
+                                currentUsername={username}
+                                chatHistory={chatHistory}
+                                token={token}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
         </div>
     );
+
 };
 export default Hub;
