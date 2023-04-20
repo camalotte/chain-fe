@@ -1,6 +1,5 @@
 import React from "react";
 import "../styles/hub.css";
-
 const MainLayout = ({ children, onLogout, loggedInUser }) => {
     return (
         <div>

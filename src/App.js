@@ -55,7 +55,9 @@ const App = () => {
                     path="/hub"
                     render={() =>
                         loggedIn ? (
-                            <MainLayout onLogout={handleLogout}>
+                            <MainLayout
+                                onLogout={handleLogout}
+                                loggedInUser={username}>
                                 <Hub username={username} token={token} />
                             </MainLayout>
                         ) : (

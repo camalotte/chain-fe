@@ -53,7 +53,7 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
                     <div
                         key={index}
                         className={`message ${
-                            message.sender_username === currentUsername
+                            message.sender === currentUsername
                                 ? "message-sent"
                                 : "message-received"
                         }`}

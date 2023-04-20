@@ -7,7 +7,7 @@ import ChatScreen from "./ChatScreen";
 import "../styles/hub.css";
 import MainLayout from "./MainLayout";
 
-const Hub = ({ username, token, onLogout }) => {
+const Hub = ({ username, token }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
@@ -136,7 +136,9 @@ const Hub = ({ username, token, onLogout }) => {
 
     return (
         <div className="hub-page">
-            <MainLayout loggedInUser ={username}/>
+            {/*<MainLayout*/}
+            {/*    // loggedInUser ={username}*/}
+            {/*/>*/}
             <div className="hub-container">
                 <div className="search-row">
                     <SearchInput
