@@ -67,9 +67,10 @@ const Hub = ({ username, token }) => {
 
             if (response.status === 201) {
                 // If the contact is added successfully, update the contacts state
+                console.log("Received new contact:", contactUsername);
                 setContacts((prevChats) => [
                     ...prevChats,
-                    { contact_username: contactUsername },
+                    { contact_username: contactUsername},
                 ]);
             } else {
                 console.error("Error adding contact:", response.data.message);
@@ -78,6 +79,13 @@ const Hub = ({ username, token }) => {
             console.error("Error adding contact:", error);
         }
     };
+
+    // useEffect(() => {
+    //     socket.on("new-contact", ({ username }) => handleAddContact(username));
+    //     return () => {
+    //         socket.off("new-contact", handleAddContact);
+    //     };
+    // }, []);
 
     const fetchContacts = async () => {
         try {
@@ -130,15 +138,23 @@ const Hub = ({ username, token }) => {
         setChatHistory((prevChatHistory) => [...prevChatHistory, message]);
     };
 
+    const handleNewContactFromMessage = (contact) => {
+        setContacts((prevContacts) => [...prevContacts, contact]);
+    };
+    useEffect(() => {
+        // Add the new event listener for "new-contact"
+        socket.on("new-contact", handleNewContactFromMessage);
+
+        // Remember to remove the event listener when the component is unmounted
+        return () => {
+            socket.off("new-contact", handleNewContactFromMessage);
+        };
+    }, []);
+
 
     console.log('Selected user:', selectedUser);
-
-
     return (
         <div className="hub-page">
-            {/*<MainLayout*/}
-            {/*    // loggedInUser ={username}*/}
-            {/*/>*/}
             <div className="hub-container">
                 <div className="search-row">
                     <SearchInput
