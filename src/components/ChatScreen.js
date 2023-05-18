@@ -10,13 +10,11 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
             const headers = {
                 Authorization: `Bearer ${token}`,
             };
-
             const response = await axios.post(
                 `http://localhost:5001/send-message/${selectedUser.username}`,
-                { messageContent },
-                { headers }
+                {messageContent},
+                {headers}
             );
-
             if (response.status === 201) {
 
                 // Add the sent message to the chatHistory state
@@ -26,7 +24,6 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
                     content: messageContent,
                     timestamp: new Date().toISOString(),
                 });
-
                 setMessageContent("");
             } else {
                 console.error("Error sending message:", response.data.message);
@@ -35,7 +32,6 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
             console.error("FE2 Error sending message:", error);
         }
     };
-
 
     useEffect(() => {
         socket.on("message", handleNewMessage);
@@ -47,15 +43,13 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
 
 
     return (
-        <div>
+        <div className="chat-screen-container">
             <div className="chat-history">
                 {chatHistory.map((message, index) => (
                     <div
                         key={index}
                         className={`message ${
-                            message.sender === currentUsername
-                                ? "message-sent"
-                                : "message-received"
+                            message.sent ? "message-sent" : "message-received"
                         }`}
                     >
                         <div className="message-content">{message.content}</div>
@@ -76,5 +70,5 @@ const ChatScreen = ({ selectedUser, chatHistory, token, currentUsername, handleN
             </form>
         </div>
     );
-};
+}
 export default ChatScreen;

@@ -49,6 +49,7 @@ const Hub = ({ username, token }) => {
 
     const handleSelectUser = (user) => {
         setSelectedUser(user);
+        fetchChatHistory(user.username); // fetch chat history for the selected user
         setSearchResults([]);
         setSearchInput("");
     };
@@ -79,13 +80,6 @@ const Hub = ({ username, token }) => {
             console.error("Error adding contact:", error);
         }
     };
-
-    // useEffect(() => {
-    //     socket.on("new-contact", ({ username }) => handleAddContact(username));
-    //     return () => {
-    //         socket.off("new-contact", handleAddContact);
-    //     };
-    // }, []);
 
     const fetchContacts = async () => {
         try {
@@ -121,10 +115,14 @@ const Hub = ({ username, token }) => {
                 { headers }
             );
             if (response.status === 200) {
-                setChatHistory(response.data);
+                const history = response.data.map((message) => ({
+                    ...message,
+                    sent: message.sender === username,
+                }));
+                setChatHistory(history);
                 setSelectedUser({ username: contactUsername });
                 // Log the fetched chat history
-                console.log(`fetched msg history with: ${contactUsername}`, response.data);
+                console.log(`fetched msg history with: ${contactUsername}`, history);
             } else {
                 console.error("Error fetching chat history:", response.data.message);
             }
@@ -135,12 +133,32 @@ const Hub = ({ username, token }) => {
 
 
     const handleNewMessage = (message) => {
-        setChatHistory((prevChatHistory) => [...prevChatHistory, message]);
+        setChatHistory((prevChatHistory) => [
+            ...prevChatHistory,
+            {
+                ...message,
+                sent: message.sender === username
+            }
+        ]);
     };
 
+
     const handleNewContactFromMessage = (contact) => {
-        setContacts((prevContacts) => [...prevContacts, contact]);
+        setContacts((prevContacts) => {
+            // Check if the contact is already in the local state
+            const isContactInState = prevContacts.some(
+                (existingContact) => existingContact.contact_username === contact.contact_username
+            );
+
+            // Add the contact only if it's not already in the local state
+            if (!isContactInState) {
+                return [...prevContacts, contact];
+            } else {
+                return prevContacts;
+            }
+        });
     };
+
     useEffect(() => {
         // Add the new event listener for "new-contact"
         socket.on("new-contact", handleNewContactFromMessage);
@@ -153,6 +171,7 @@ const Hub = ({ username, token }) => {
 
 
     console.log('Selected user:', selectedUser);
+
     return (
         <div className="hub-page">
             <div className="hub-container">
@@ -185,6 +204,5 @@ const Hub = ({ username, token }) => {
             </div>
         </div>
     );
-
 };
 export default Hub;
